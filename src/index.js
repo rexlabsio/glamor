@@ -160,16 +160,16 @@ function selector(id, path) {
   if(!id) {
     return path.replace(/\&/g, '')
   }
-  if(!path) return `.css-${id},[data-css-${id}]`
+  if(!path) return `.css-${id}`
 
   let x = splitSelector(path)
     .map(x => x.indexOf('&') >= 0 ?
-      [ x.replace(/\&/mg, `.css-${id}`), x.replace(/\&/mg, `[data-css-${id}]`) ].join(',') // todo - make sure each sub selector has an &
-      : `.css-${id}${x},[data-css-${id}]${x}`)
+      [ x.replace(/\&/mg, `.css-${id}`) ].join(',') // todo - make sure each sub selector has an &
+      : `.css-${id}${x}`)
     .join(',')
 
   if(canSimulate && /^\&\:/.exec(path) && !/\s/.exec(path)) {
-    x += `,.css-${id}[data-simulate-${simple(path)}],[data-css-${id}][data-simulate-${simple(path)}]`
+    x += `,.css-${id}[data-simulate-${simple(path)}]`
   }
   return x
 

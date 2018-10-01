@@ -1,6 +1,6 @@
 {
   "name": "@rexlabs/glamor",
-  "version": "2.20.41-rc.1",
+  "version": "2.20.41-rc.2",
   "description": "inline css for component systems",
   "main": "lib/index.js",
   "typings": "index.d.ts",

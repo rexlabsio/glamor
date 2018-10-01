@@ -75,6 +75,8 @@ export function StyleSheet (
   this.maxLength = maxLength;
   this.ctr = 0;
   this.subscribers = [];
+  this.rulesQueue = [];
+  this.requestAnimationFrame = null;
 }
 
 assign(StyleSheet.prototype, {
@@ -151,7 +153,17 @@ assign(StyleSheet.prototype, {
           const tag = last(this.tags);
           tag.insertBefore(document.createTextNode(rule), tag.firstChild);
         } else {
-          last(this.tags).appendChild(document.createTextNode(rule));
+          this.rulesQueue.push(rule);
+          // NOTE: we're using `requestAnimationFrame` here to drastically
+          // reduce the evaluation time of rule inserts on page load ...
+          // to do so we're queueing rule inserts and once `requestAnimationFrame`
+          // runs we insert the whole queue and reset it
+          window.cancelAnimationFrame(this.requestAnimationFrame);
+          this.requestAnimationFrame = window.requestAnimationFrame(() => {
+            const queuedRules = this.rulesQueue.join('');
+            this.rulesQueue = [];
+            last(this.tags).appendChild(document.createTextNode(queuedRules));
+          });
         }
       }
     } else {

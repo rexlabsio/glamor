@@ -84,9 +84,10 @@ assign(StyleSheet.prototype, {
   // share components between Shell and Classic via Bridge
   subscribe (fn) {
     this.subscribers.push(fn);
+    return () => this.unsubscribe(fn);
   },
   unsubscribe (fn) {
-    this.subscribers.filters((f) => f !== fn);
+    this.subscribers.filter((f) => f !== fn);
   },
   emit (args) {
     this.subscribers.forEach((fn) => fn(args));

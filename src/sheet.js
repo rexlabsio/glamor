@@ -87,7 +87,7 @@ assign(StyleSheet.prototype, {
     return () => this.unsubscribe(fn);
   },
   unsubscribe (fn) {
-    this.subscribers.filter((f) => f !== fn);
+    this.subscribers = this.subscribers.filter((f) => f !== fn);
   },
   emit (args) {
     this.subscribers.forEach((fn) => fn(args));
